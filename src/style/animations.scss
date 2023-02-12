@@ -1,0 +1,60 @@
+@keyframes animation-jiggle {
+	0% {
+		transform: rotateZ(0deg);
+	}
+	35% {
+		transform: rotateZ(20deg);
+	}
+	70% {
+		transform: rotateZ(-20deg);
+	}
+	100% {
+		transform: rotateZ(0deg);
+	}
+}
+
+@keyframes animation-jump {
+	0% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-20px);
+	}
+	100% {
+		transform: translateY(0);
+	}
+}
+
+@keyframes animation-runaway {
+	0% {
+		transition: all ease 0.3s;
+
+		left: calc(50% - 37.5px);
+		right: auto;
+	}
+	35% {
+		left: 170%;
+	}
+	36% {
+		transition: none;
+		left: -100%;
+	}
+	100% {
+		transition: all ease 0.3s;
+		left: calc(50% - 37.5px);
+	}
+}
+// 	0% {
+
+// 	}
+// 	35% {
+
+// 	}
+// 	36% {
+
+// 	}
+// 	100% {
+
+// 	}
+
+// }
