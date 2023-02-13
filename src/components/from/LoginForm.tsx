@@ -4,13 +4,23 @@ import RestApi from '../../api/RestApi';
 import { validateEmail, validatePass } from '../../tools/validate';
 import MartiansIcon from '../icons/MartiansIcon';
 import { randomAnim } from '../../tools/randomAmin';
+import Lock from '../icons/Lock';
+import Spinner from '../Spinner';
 
 const LoginForm = () => {
 	const validateTimeOut = useRef<any>(null);
 
-	const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
-	const [isPassValid, setIsPassValid] = useState<boolean>(true);
+	const [isEmailValid, setIsEmailValid] = useState<boolean>(false);
+	const [isPassValid, setIsPassValid] = useState<boolean>(false);
 	const [monsterAnim, setMonsterAnim] = useState<string>('');
+	const [wasSubmitted, setWasSubmitted] = useState<boolean>(false);
+
+	const [login, setLogin] = useState<string>('');
+	const [password, setPassword] = useState<string>('');
+
+	const [requesting, setRequesting] = useState<boolean>(false);
+
+	console.log(isEmailValid && isPassValid);
 
 	const checkValidity = (string: string, type: string) => {
 		clearTimeout(validateTimeOut.current);
@@ -20,21 +30,63 @@ const LoginForm = () => {
 		}, 200);
 	};
 
+	const blankRequest = async () => {
+		setRequesting(true);
+		setTimeout(() => {
+			setRequesting(false);
+			setWasSubmitted(true);
+		}, 400);
+	};
+
+	useEffect(() => {
+		checkValidity(login, 'email');
+	}, [login]);
+
+	useEffect(() => {
+		checkValidity(password, 'password');
+	}, [password]);
+
 	return (
 		<div className="login-form-container">
 			<div className="form">
-				<form id="login-form">
+				<form
+					id="login-form"
+					onSubmit={(e) => {
+						e.preventDefault();
+						blankRequest();
+					}}
+				>
 					<h1>А ну-ка, входи</h1>
-					{!isEmailValid && 'НЕПРАВИЛЬНО'}
-					<input type="email" name="email" placeholder="email" onChange={(e) => checkValidity(e.target.value, 'email')} />
-					{!isPassValid && 'НЕПРАВИЛЬНО'}
-					<input type="password" name="password" placeholder="pas" onChange={(e) => checkValidity(e.target.value, 'password')} />
 
-					{monsterAnim}
+					<input
+						className={!isEmailValid && wasSubmitted ? 'non-valid' : ''}
+						type="email"
+						name="email"
+						value={login}
+						placeholder="email"
+						onChange={(e) => {
+							setLogin(e.target.value);
+						}}
+					/>
+					<input
+						className={!isPassValid && wasSubmitted ? 'non-valid' : ''}
+						type="password"
+						name="password"
+						value={password}
+						placeholder="pas"
+						onChange={(e) => {
+							setPassword(e.target.value);
+						}}
+					/>
+
+					<button type="submit" disabled={!isEmailValid || !isPassValid || requesting}>
+						{(!isEmailValid || !isPassValid) && <Lock />}
+						{requesting && <Spinner />}
+						{!requesting && <span>Вход</span>}
+					</button>
 				</form>
-
 				<div className="box">
-					<div className="monstrik" onClick={() => setMonsterAnim(randomAnim())} style={{ animation: `${monsterAnim} 1s forwards` }}>
+					<div className="monstrik" onClick={() => setMonsterAnim(randomAnim())} style={{ animation: `${monsterAnim} .5s forwards` }}>
 						<MartiansIcon />
 					</div>
 				</div>

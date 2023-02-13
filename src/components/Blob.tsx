@@ -23,7 +23,6 @@ const Blob = ({ size, color, wanderCoords }: BlobProps) => {
 		interval.current = setInterval(() => {
 			setCurrenCoords(wanderCoords[i]);
 			i < wanderCoords.length - 1 ? (i += 1) : (i = 0);
-			console.log(i);
 		}, 1000);
 	}, []);
 
